@@ -13,6 +13,8 @@ import Paper from '@mui/material/Paper';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Deposits from './dashboard/Deposits';
 import Typography from "@mui/material/Typography";
+import { mainListItems, secondaryListItems } from './dashboard/listItems';
+import {Divider, List} from "@mui/material";
 
 const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -92,6 +94,8 @@ export default function Dashboard() {
                         </Typography>
                     </Toolbar>
                 </AppBar>
+
+                {/* Drawer contents */}
                 <Drawer variant="permanent" open={open}>
                     <Toolbar
                         sx={{
@@ -105,6 +109,15 @@ export default function Dashboard() {
                             <ChevronLeftIcon />
                         </IconButton>
                     </Toolbar>
+                    <Divider />
+                    <List component="nav">
+                        {mainListItems}
+                        {/*
+                        <Divider sx={{ my: 1 }} />
+                        {secondaryListItems}
+                        */
+                        }
+                    </List>
                 </Drawer>
                 <Box component="main" sx={{ flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px' }}>
                     {/* Adjust marginTop to accommodate AppBar height */}
