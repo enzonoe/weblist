@@ -6,6 +6,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ListIcon from '@mui/icons-material/List';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import Link from "@mui/material/Link";
 
 export const mainListItems = (
     <React.Fragment>
@@ -16,27 +17,37 @@ export const mainListItems = (
             <ListItemText primary="Dashboard"/>
         </ListItemButton>
 
-        <ListItemButton>
-            <ListItemIcon>
-                <ListIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Lists"/>
-        </ListItemButton>
+        {/* WORK IN PROGRESS */}
+        <Link to="../Lists" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItemButton>
+                <ListItemIcon>
+                    <ListIcon />
+                </ListItemIcon>
+                <ListItemText primary="Lists" />
+            </ListItemButton>
+        </Link>
     </React.Fragment>
 );
 
 export const secondaryListItems = (
-    <React.Fragment>
-        {/*
+<React.Fragment>
+    {/*
         <ListSubheader component="div" inset>
             Saved reports
         </ListSubheader>
         */}
+    <a
+        href="https://github.com/enzonoe/weblist/tree/main"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{textDecoration: 'none', color: 'inherit'}}
+    >
         <ListItemButton>
             <ListItemIcon>
                 <GitHubIcon/>
             </ListItemIcon>
             <ListItemText primary="GitHub Repo"/>
         </ListItemButton>
-    </React.Fragment>
+    </a>
+</React.Fragment>
 );
