@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -11,12 +11,15 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Deposits from './dashboard/Deposits';
+import ListTotal from './dashboard/ListTotal';
 import Typography from "@mui/material/Typography";
-import { mainListItems, secondaryListItems } from './dashboard/listItems';
+import {mainListItems, secondaryListItems} from './dashboard/ListItems';
 import {Divider, List} from "@mui/material";
+import ShortList from "./dashboard/ShortList";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -32,8 +35,8 @@ const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         '& .MuiDrawer-paper': {
             position: 'relative',
             whiteSpace: 'nowrap',
@@ -58,44 +61,78 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const defaultTheme = createTheme();
-
 const drawerWidth = 240;
 
 export default function Dashboard() {
     const [open, setOpen] = React.useState(true);
+    const [isDarkMode, setIsDarkMode] = React.useState(false);
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
+    const toggleTheme = () => {
+        setIsDarkMode(prevIsDarkMode => !prevIsDarkMode);
+        const newTheme = createTheme({
+            palette: {
+                mode: !isDarkMode ? 'dark' : 'light',
+                primary: {
+                    main: '#1976d2',
+                },
+                secondary: {
+                    main: '#f50057',
+                },
+            },
+        });
+        setTheme(newTheme);
+    };
+
+    const [theme, setTheme] = useState(() => createTheme({
+        palette: {
+            mode: isDarkMode ? 'dark' : 'light',
+            primary: {
+                main: '#1976d2',
+            },
+            secondary: {
+                main: '#f50057',
+            },
+        },
+    }));
+
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
+        <ThemeProvider theme={theme}>
+            <Box sx={{display: 'flex'}}>
+                <CssBaseline/>
                 <AppBar position="absolute" open={open}>
-                    <Toolbar sx={{ pr: '24px' }}>
+                    <Toolbar sx={{pr: '24px'}}>
                         <IconButton
                             edge="start"
                             color="inherit"
                             aria-label="open drawer"
                             onClick={toggleDrawer}
-                            sx={{ marginRight: '36px', ...(open && { display: 'none' }) }}
+                            sx={{marginRight: '36px', ...(open && {display: 'none'})}}
                         >
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Typography
                             component="h1"
                             variant="h6"
                             color="inherit"
                             noWrap
-                            sx={{ flexGrow: 1 }}
+                            sx={{flexGrow: 1}}
                         >
                             Dashboard
                         </Typography>
+                        <IconButton
+                            color="inherit"
+                            aria-label="toggle dark mode"
+                            onClick={toggleTheme}
+                        >
+                            {isDarkMode ? <Brightness7Icon/> : <Brightness4Icon/>}
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
 
-                {/* Drawer contents */}
                 <Drawer variant="permanent" open={open}>
                     <Toolbar
                         sx={{
@@ -106,24 +143,31 @@ export default function Dashboard() {
                         }}
                     >
                         <IconButton onClick={toggleDrawer}>
-                            <ChevronLeftIcon />
+                            <ChevronLeftIcon/>
                         </IconButton>
                     </Toolbar>
-                    <Divider />
+                    <Divider/>
                     <List component="nav">
                         {mainListItems}
-                        {/*
-                        <Divider sx={{ my: 1 }} />
+                        <Divider sx={{my: 1}}/>
                         {secondaryListItems}
-                        */
-                        }
                     </List>
                 </Drawer>
-                <Box component="main" sx={{ flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px' }}>
-                    {/* Adjust marginTop to accommodate AppBar height */}
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Box component="main" sx={{flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px'}}>
+                    <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                         <Grid container spacing={3}>
-                            {/* Recent Deposits */}
+                            <Grid item xs={12} md={8} lg={9}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: 240,
+                                    }}
+                                >
+                                    <ShortList/>
+                                </Paper>
+                            </Grid>
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper
                                     sx={{
@@ -133,7 +177,7 @@ export default function Dashboard() {
                                         height: 240,
                                     }}
                                 >
-                                    <Deposits />
+                                    <ListTotal/>
                                 </Paper>
                             </Grid>
                         </Grid>
