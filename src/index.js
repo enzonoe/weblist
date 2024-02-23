@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './dashboard/index.css';
 import Dashboard from './Dashboard';
-import Lists from './Lists'; // Import the Lists component
+import Lists from './Lists';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 ReactDOM.render(

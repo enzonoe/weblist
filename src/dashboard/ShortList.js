@@ -33,10 +33,11 @@ const rows = [
     createData(
         2,
         '14 Mar, 2019',
-        'Tom Scholz',
-        'Boston, MA',
-        'MC ⠀•••• 1253',
-        100.81),
+        'Watchlist',
+        '905',
+        '350',
+        1255
+    ),
 ];
 
 function preventDefault(event) {
