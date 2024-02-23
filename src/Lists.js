@@ -15,6 +15,8 @@ import {mainListItems, secondaryListItems} from './dashboard/ListItems';
 import {Divider, List} from "@mui/material";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import Paper from "@mui/material/Paper";
+import ListTable from "./lists/ListTable";
 
 const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -153,7 +155,20 @@ export default function Lists() {
                 <Box component="main" sx={{flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px'}}>
                     <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                         <Grid container spacing={3}>
-
+                            {/* ListTable */}
+                            <Grid item xs={12} md={8} lg={9}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: 430,
+                                    }}
+                                >
+                                    <ListTable/>
+                                </Paper>
+                            </Grid>
+                            {/* Other Components */}
                         </Grid>
                     </Container>
                 </Box>
