@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import Title from '../other/Title';
+import Title from "../other/Title";
 
 function preventDefault(event) {
     event.preventDefault();
@@ -10,7 +10,7 @@ function preventDefault(event) {
 export default function ListTotal() {
     return (
         <React.Fragment>
-            <Title>List Total</Title>
+            <Title>Add New List</Title>
             <Typography component="p" variant="h4">
                 11
             </Typography>

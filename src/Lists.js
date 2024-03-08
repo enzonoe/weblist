@@ -17,6 +17,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Paper from "@mui/material/Paper";
 import ListTable from "./lists/ListTable";
+import AddNewList from "./lists/AddNewList";
 
 const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -155,17 +156,29 @@ export default function Lists() {
                 <Box component="main" sx={{flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px'}}>
                     <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                         <Grid container spacing={3}>
-                            {/* ListTable */}
-                            <Grid item xs={12} md={8} lg={9}>
+                                {/* ListTable */}
+                                <Grid item xs={12} md={8} lg={9}>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            height: 670,
+                                        }}
+                                    >
+                                        <ListTable/>
+                                    </Paper>
+                                </Grid>
+                            <Grid item xs={12} md={4} lg={3}>
                                 <Paper
                                     sx={{
                                         p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        height: 670,
+                                        height: 240,
                                     }}
                                 >
-                                    <ListTable/>
+                                    <AddNewList/>
                                 </Paper>
                             </Grid>
                             {/* Other Components */}
