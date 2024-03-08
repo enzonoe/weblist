@@ -20,6 +20,10 @@ const rows = [
     { id: 10, taskName: 'Grocerie List', description: 'List of my groceries'},
     { id: 11, taskName: 'Grocerie List', description: 'List of my groceries'},
     { id: 12, taskName: 'Grocerie List', description: 'List of my groceries'},
+    { id: 13, taskName: 'Grocerie List', description: 'List of my groceries'},
+    { id: 14, taskName: 'Grocerie List', description: 'List of my groceries'},
+    { id: 15, taskName: 'Grocerie List', description: 'List of my groceries'},
+    { id: 16, taskName: 'Grocerie List', description: 'List of my groceries'},
 ];
 
 export default function DataTable() {
@@ -28,6 +32,9 @@ export default function DataTable() {
             <DataGrid
                 rows={rows}
                 columns={columns}
+                components={{
+                    pagination: () => null, // Hides the pagination controls
+                }}
             />
         </div>
     );
