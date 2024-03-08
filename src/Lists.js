@@ -162,7 +162,7 @@ export default function Lists() {
                                         p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        height: 430,
+                                        height: 670,
                                     }}
                                 >
                                     <ListTable/>
