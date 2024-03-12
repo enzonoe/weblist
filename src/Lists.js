@@ -156,19 +156,19 @@ export default function Lists() {
                 <Box component="main" sx={{flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px'}}>
                     <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                         <Grid container spacing={3}>
-                                {/* ListTable */}
-                                <Grid item xs={12} md={8} lg={9}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 670,
-                                        }}
-                                    >
-                                        <ListTable/>
-                                    </Paper>
-                                </Grid>
+                            {/* ListTable */}
+                            <Grid item xs={12} md={8} lg={9}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: 670,
+                                    }}
+                                >
+                                    <ListTable/>
+                                </Paper>
+                            </Grid>
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper
                                     sx={{
