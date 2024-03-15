@@ -1,23 +1,47 @@
-mod routes;
+mod api;
+mod models;
+mod repository;
 
-use std::env;
-use actix_web::{App, HttpServer};
-use dotenv::dotenv;
-use listenfd::ListenFd;
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
+use serde::{Serialize};
 
-#[actix_rt::main]
-async fn main() -> std::io::Result<()> {
-    dotenv().ok();
-    db::init();
-    let mut listenfd = ListenFd::from_env();
-    let mut server = HttpServer::new(|| App::new().configure(employees::init_routes));
-    server = match listenfd.take_tcp_listener(0)? {
-        Some(listener) => server.listen(listener)?,
-        None => {
-            let host = env::var("HOST").expect("Please set host in .env");
-            let port = env::var("PORT").expect("Please set port in .env");
-            server.bind(format!("{}:{}", host, port))?
-        }
+#[derive(Serialize)]
+pub struct Response {
+    //pub status: String,
+    pub message: String,
+}
+
+#[get("/weblist")]
+async fn healthcheck() -> impl Responder {
+    let response = Response {
+        message: "Everything is working fine".to_string(),
     };
-    server.run().await
+    HttpResponse::Ok().json(response)
+}
+
+/*
+async fn not_found() -> Result<HttpResponse> {
+    let response = Response {
+        message: "Resource not found".to_string(),
+    };
+    Ok(HttpResponse::NotFound().json(response))
+}
+ */
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    let todo_db = repository::database::Database::new();
+    let app_data = web::Data::new(todo_db);
+
+    HttpServer::new(move ||
+        App::new()
+            .app_data(app_data.clone())
+            .configure(api::api::config)
+            .service(healthcheck)
+            //.default_service(web::route().to(not_found))
+            .wrap(actix_web::middleware::Logger::default())
+    )
+        .bind(("127.0.0.1", 8080))?
+        .run()
+        .await
 }

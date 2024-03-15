@@ -4,33 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="275091d5-ce06-433a-9396-5e0c5aa3904d" name="Changes" comment="GitHub Repo button added to ListItems.js, index.js updated, Lists button updated">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/weblist.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/logo192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/robots.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Dashboard.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lists.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dashboard/ListItems.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dashboard/ListTotal.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dashboard/ShortList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dashboard/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lists/AddNewList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lists/ListTable.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/other/Title.js" beforeDir="false" />
+    <list default="true" id="f704dc08-3e4e-43b8-823e-31d7945885fd" name="Changes" comment="Button added to AddNewList.js">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +57,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/konrad/WebstormProjects/weblist/Frontend",
+    "last_opened_file_path": "C:/Users/User/Documents/Git/weblist/Frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -105,7 +80,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="275091d5-ce06-433a-9396-5e0c5aa3904d" name="Changes" comment="" />
+      <changelist id="f704dc08-3e4e-43b8-823e-31d7945885fd" name="Changes" comment="Button added to AddNewList.js" />
       <created>1708542301142</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -114,6 +89,7 @@
       <workItem from="1708620079166" duration="16576000" />
       <workItem from="1709067879459" duration="433000" />
       <workItem from="1710178708312" duration="731000" />
+      <workItem from="1710242353706" duration="65000" />
     </task>
     <task id="LOCAL-00001" summary="Default files moved to dashboard_OLD, components Dashboard.js, Deposits.js and Title.js added and demo code added">
       <option name="closed" value="true" />
