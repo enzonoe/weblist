@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS 'Lists', 'Topics';
+CREATE TABLE 'Lists' (
+    ID int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    Name varchar(255) NOT NULL
+);
+
+CREATE TABLE 'Topics'(
+    ID int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    ListsID int NOT NULL FOREIGN KEY REFERENCES Lists(ID),
+    Topic varchar(255) NOT NULL
+);
