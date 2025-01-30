@@ -128,3 +128,24 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# JetBrains IDEs (WebStorm, IntelliJ, PhpStorm, etc.)
+.idea/
+
+# Visual Studio Code workspace settings
+.vscode/
+.vsc/
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+
+# Python virtual environment
+venv/
+
+# Temporary files
+*.swp
+*.swo

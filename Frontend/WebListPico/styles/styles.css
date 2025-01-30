@@ -1,0 +1,78 @@
+/* Apply grey background to both html and body */
+html,
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 10px;
+    padding: 0;
+    background-color: #181818;
+    color: white;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container for centering content */
+.container {
+    width: 1800px;
+    max-width: 100%;
+    min-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+}
+
+/* Header */
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+/* Main Content */
+h2 {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #555;
+    font-size: 1.1em;
+}
+
+/* Footer */
+footer {
+    background-color: white;
+    color: white;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    .container {
+        width: 90%;
+        min-width: 300px;
+        padding: 20px;
+    }
+}
