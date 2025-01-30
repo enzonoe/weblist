@@ -10,9 +10,8 @@ CREATE TABLE list_contents (
     FOREIGN KEY (list_id) REFERENCES lists(list_id)
 );
 
---- example: INSERT INTO lists (list_name) VALUES ('Groceries');
---- example: INSERT INTO list_contents (list_id, content) VALUES
---- example: (1, 'Apples'),
---- example: (1, 'Milk'),
---- example: (1, 'Bread');
-
+INSERT INTO lists (list_name) VALUES ('Groceries');
+INSERT INTO list_contents (list_id, content) VALUES
+(1, 'Apples'),
+(1, 'Milk'),
+(1, 'Bread');
