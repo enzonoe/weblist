@@ -55,6 +55,30 @@ async def index(req):
     except OSError:
         return "Error: index.html not found!", 404
 
+@app.route('/show')
+async def show(req):
+    try:
+        with open("sites/show.html", "r") as f:
+            return f.read()
+    except OSError:
+        return "Error: show.html not found!", 404
+    
+@app.route('/edit')
+async def edit(req):
+    try:
+        with open("sites/edit.html", "r") as f:
+            return f.read()
+    except OSError:
+        return "Error: edit.html not found!", 404
+    
+@app.route('/delete')
+async def delete(req):
+    try:
+        with open("sites/delete.html", "r") as f:
+            return f.read()
+    except OSError:
+        return "Error: delete.html not found!", 404
+
 @app.route('/styles/<filename>')
 async def static_file(req, filename):
     try:
