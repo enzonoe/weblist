@@ -1,4 +1,6 @@
+import ujson
 import network
+import urequests
 import uasyncio as asyncio
 from microdot import Microdot, Response
 import os
@@ -63,6 +65,14 @@ async def static_file(req, filename):
         return Response(body=content, headers={'Content-Type': 'text/css'})
     except OSError:
         return "Error: file not found!", 404
+    
+@app.route('/api/data')
+async def get_api_data(req):
+    api_url = "http://192.168.31.145:5000"
+    response = urequests.get(api_url)
+    data = response.json()
+
+    return Response(body=ujson.dumps(data), headers={'Content-Type': 'application/json'})
 
 async def main():
     connectWifi()
