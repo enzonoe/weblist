@@ -22,6 +22,7 @@ db.connect(err => {
 });
 
 // Get all lists and their contents
+// example: curl.exe -X GET http://localhost:5000/
 app.get('/', (req, res) => {
     const query = `
         SELECT lists.list_name, list_contents.content
@@ -49,6 +50,7 @@ app.get('/', (req, res) => {
 });
 
 // Get specific list by name
+// example: curl.exe -X GET http://localhost:5000/Groceries
 app.get('/:list_name', (req, res) => {
     const listName = req.params.list_name;
 
@@ -74,6 +76,7 @@ app.get('/:list_name', (req, res) => {
 });
 
 // Create a new list and add its contents
+// example: curl.exe -X POST http://localhost:5000/lists -H "Content-Type: application/json" -d '{\"list_name\": \"test\", \"contents\": [\"Milk\", \"Eggs\"]}'
 app.post('/lists', (req, res) => {
     const { list_name, contents } = req.body; // Expecting { list_name: "Groceries", contents: ["Milk", "Eggs"] }
 
@@ -109,6 +112,7 @@ app.post('/lists', (req, res) => {
 });
 
 // Delete a list by name (removes both list and its contents)
+// example: curl.exe -X DELETE http://localhost:5000/lists/test
 app.delete('/lists/:list_name', (req, res) => {
     const listName = req.params.list_name;
 
