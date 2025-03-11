@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField, Grid, Paper, Typography, Box } from '@mui/material';
 
-export default function CreateList({ rows, onRowChange }) {
+export default function ListForm({ rows, onRowChange, listName, description, onListNameChange, onDescriptionChange }) {
     return (
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 670 }}>
             <Typography variant="h6" gutterBottom>
@@ -14,6 +14,8 @@ export default function CreateList({ rows, onRowChange }) {
                             fullWidth
                             label="List Name"
                             variant="outlined"
+                            value={listName}
+                            onChange={(e) => onListNameChange(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -21,6 +23,8 @@ export default function CreateList({ rows, onRowChange }) {
                             fullWidth
                             label="Description"
                             variant="outlined"
+                            value={description}
+                            onChange={(e) => onDescriptionChange(e.target.value)}
                         />
                     </Grid>
                 </Grid>

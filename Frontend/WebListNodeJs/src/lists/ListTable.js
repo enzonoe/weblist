@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { Box, Button } from '@mui/material';
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -10,9 +11,10 @@ const columns = [
     { field: 'lastChanged', headerName: 'Last Changed', width: 100 },
 ];
 
-export default function DataTable({ searchText }) {
+export default function ListTable({ searchText, onDeleteList }) {
     const [rows, setRows] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null); // Track selected row
 
     useEffect(() => {
         // Fetch data from the API
@@ -45,6 +47,17 @@ export default function DataTable({ searchText }) {
         }
     }, [searchText, rows]);
 
+    // Handle row selection
+    const handleRowSelection = (selection) => {
+        if (selection.length > 0) {
+            const selectedId = selection[0];
+            const selectedRow = filteredRows.find(row => row.id === selectedId);
+            setSelectedRow(selectedRow);
+        } else {
+            setSelectedRow(null);
+        }
+    };
+
     return (
         <div style={{ height: 640, width: '100%' }}>
             <DataGrid
@@ -53,7 +66,20 @@ export default function DataTable({ searchText }) {
                 components={{
                     pagination: () => null, // Hides the pagination controls
                 }}
+                checkboxSelection
+                onSelectionModelChange={handleRowSelection} // Track selected row
             />
+            {selectedRow && (
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => onDeleteList(selectedRow.listName)} // Pass listName, not the entire row
+                    >
+                        Delete Selected List
+                    </Button>
+                </Box>
+            )}
         </div>
     );
 }

@@ -18,6 +18,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Paper from "@mui/material/Paper";
 import AddRow from "./list_creation/AddRow";
 import ListForm from "./list_creation/ListForm";
+import CreateList from './list_creation/CreateList';
 
 const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -68,6 +69,8 @@ export default function Lists() {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [searchText, setSearchText] = React.useState('');
     const [rows, setRows] = useState([{ id: 1, value: '' }]); // State for dynamic rows
+    const [listName, setListName] = useState(''); // State for list name
+    const [description, setDescription] = useState(''); // State for description
 
     // Add a new row
     const addRow = () => {
@@ -89,6 +92,16 @@ export default function Lists() {
             row.id === id ? { ...row, value } : row
         );
         setRows(updatedRows);
+    };
+
+    // Handle list name change
+    const handleListNameChange = (value) => {
+        setListName(value);
+    };
+
+    // Handle description change
+    const handleDescriptionChange = (value) => {
+        setDescription(value);
     };
 
     const toggleDrawer = () => {
@@ -187,8 +200,12 @@ export default function Lists() {
                             {/* ListTable */}
                             <Grid item xs={12} md={8} lg={9}>
                                 <ListForm
-                                    rows={rows} // Pass rows to CreateList
-                                    onRowChange={handleRowChange} // Pass handleRowChange
+                                    rows={rows}
+                                    onRowChange={handleRowChange}
+                                    listName={listName}
+                                    description={description}
+                                    onListNameChange={handleListNameChange}
+                                    onDescriptionChange={handleDescriptionChange}
                                 />
                             </Grid>
                             <Grid item xs={12} md={4} lg={3}>
@@ -201,7 +218,23 @@ export default function Lists() {
                                         mb: 3,
                                     }}
                                 >
-                                    <AddRow onAddRow={addRow} onRemoveRow={removeRow} /> {/* Pass addRow and removeRow */}
+                                    <AddRow onAddRow={addRow} onRemoveRow={removeRow} />
+                                </Paper>
+
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: 240,
+                                        mb: 3,
+                                    }}
+                                >
+                                    <CreateList
+                                        listName={listName}
+                                        description={description}
+                                        rows={rows}
+                                    />
                                 </Paper>
                             </Grid>
                             {/* Other Components */}

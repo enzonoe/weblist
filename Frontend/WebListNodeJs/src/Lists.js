@@ -17,7 +17,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Paper from "@mui/material/Paper";
 import ListTable from "./lists/ListTable";
-import AddNewList from "./lists/AddNewList";
+import AddNewList from "./lists/AddOrDeleteList";
 import ShowSelectedList from "./lists/ShowSelectedList";
 import SearchList from "./lists/SearchList";
 
