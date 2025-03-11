@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Title from "../other/Title";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 
 export default function AddRow({ onAddRow, onRemoveRow }) { // Add onRemoveRow prop
     return (
@@ -10,14 +10,17 @@ export default function AddRow({ onAddRow, onRemoveRow }) { // Add onRemoveRow p
             <Typography color="text.secondary" sx={{ flex: 1 }}>
                 Add or remove items from the list
             </Typography>
-            <Stack direction="row" spacing={2}> {/* Use Stack for button layout */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
                 <Button variant="contained" onClick={onAddRow}>
                     Add Row
                 </Button>
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Button variant="outlined" onClick={onRemoveRow}>
                     Remove Last Row
                 </Button>
-            </Stack>
-        </React.Fragment>
+            </Box>
+
+        </React.Fragment >
     );
 }

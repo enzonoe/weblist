@@ -17,7 +17,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Paper from "@mui/material/Paper";
 import AddRow from "./list_creation/AddRow";
-import ListCreation from "./list_creation/CreateList";
+import ListForm from "./list_creation/ListForm";
 
 const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -186,7 +186,7 @@ export default function Lists() {
                         <Grid container spacing={3}>
                             {/* ListTable */}
                             <Grid item xs={12} md={8} lg={9}>
-                                <ListCreation
+                                <ListForm
                                     rows={rows} // Pass rows to CreateList
                                     onRowChange={handleRowChange} // Pass handleRowChange
                                 />
