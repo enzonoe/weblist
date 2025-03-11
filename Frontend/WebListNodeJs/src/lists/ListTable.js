@@ -10,8 +10,9 @@ const columns = [
     { field: 'lastChanged', headerName: 'Last Changed', width: 100 },
 ];
 
-export default function DataTable() {
+export default function DataTable({ searchText }) {
     const [rows, setRows] = useState([]);
+    const [filteredRows, setFilteredRows] = useState([]);
 
     useEffect(() => {
         // Fetch data from the API
@@ -27,20 +28,32 @@ export default function DataTable() {
                     lastChanged: new Date(listData.last_changed).toLocaleDateString(),
                 }));
                 setRows(transformedData);
+                setFilteredRows(transformedData); // Initialize filtered rows
             })
             .catch(error => console.error('Error fetching data:', error));
     }, []);
 
+    useEffect(() => {
+        // Filter rows based on search text
+        if (searchText) {
+            const filtered = rows.filter(row =>
+                row.listName.toLowerCase().includes(searchText.toLowerCase())
+            );
+            setFilteredRows(filtered);
+        } else {
+            setFilteredRows(rows); // Reset to all rows if search text is empty
+        }
+    }, [searchText, rows]);
+
     return (
         <div style={{ height: 640, width: '100%' }}>
             <DataGrid
-                rows={rows}
+                rows={filteredRows}
                 columns={columns}
                 components={{
                     pagination: () => null, // Hides the pagination controls
                 }}
             />
-            {/* if one value is selected -> then display "edit", "alter" and "delete"*/}
         </div>
     );
 }
