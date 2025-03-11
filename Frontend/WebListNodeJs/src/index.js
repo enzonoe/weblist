@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'; // Import createRoot from react-d
 import './dashboard/index.css';
 import Dashboard from './Dashboard';
 import Lists from './Lists';
+import ListCreation from './ListCreation';
+import Contents from './ListContents';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // Get the root element
@@ -14,8 +16,11 @@ root.render(
     <React.StrictMode>
         <Router>
             <Routes>
+                {/* Ensure Lists is properly imported and used */}
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/Lists" element={<Lists />} /> {/* Ensure Lists is properly imported and used */}
+                <Route path="/Lists" element={<Lists />} />
+                <Route path="/CreateList" element={<ListCreation />} />
+                <Route path="/Lists/Contents" element={<Contents />} />
             </Routes>
         </Router>
     </React.StrictMode>
