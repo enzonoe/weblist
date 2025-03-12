@@ -4,11 +4,23 @@ import Title from "../other/Title";
 import { Button } from "@mui/material";
 import { Box } from '@mui/material';
 
-export default function ToggleCheck({ selectedItem, onToggleCheck }) {
+export default function ToggleCheck({ selectedItem, item, onToggleSuccess }) {
     const handleCheckClick = () => {
-        if (selectedItem) {
-            // Call the onToggleCheck function passed from the parent
-            onToggleCheck(selectedItem);
+        if (selectedItem && item) {
+            // Call the API to toggle the checked status
+            fetch(`http://localhost:5000/lists/${item}/${selectedItem.id}`, {
+                method: 'PUT',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Toggled checked status:', data);
+
+                    // Notify the parent component of the successful toggle
+                    if (onToggleSuccess) {
+                        onToggleSuccess({ ...selectedItem, checked: !selectedItem.checked });
+                    }
+                })
+                .catch(error => console.error('Error toggling checked status:', error));
         }
     };
 

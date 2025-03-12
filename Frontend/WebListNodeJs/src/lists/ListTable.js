@@ -43,7 +43,6 @@ export default function ListTable({ searchText, onSelectList }) {
     }, [searchText, rows]);
 
     const handleRowClick = (params) => {
-        console.log("Row clicked:", params.row); // Debugging
         onSelectList(params.row.listName); // Pass the selected list name to the parent
     };
 

@@ -90,25 +90,8 @@ export default function ListShow() {
         },
     }));
 
-    const handleToggleCheck = (selectedItem) => {
-        if (selectedItem) {
-            // Call the API to toggle the checked status
-            fetch(`http://localhost:5000/lists/${item}/${selectedItem.id}`, {
-                method: 'PUT',
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Toggled checked status:', data);
-
-                    // Update the selected item's checked status locally
-                    const updatedItem = { ...selectedItem, checked: !selectedItem.checked };
-                    setSelectedItem(updatedItem);
-
-                    // Optionally, refetch the list data to update the UI
-                    // You can implement this if needed
-                })
-                .catch(error => console.error('Error toggling checked status:', error));
-        }
+    const handleToggleSuccess = (updatedItem) => {
+        setSelectedItem(updatedItem);
     };
 
     return (
@@ -154,8 +137,12 @@ export default function ListShow() {
                             </Grid>
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
-                                    {/* Pass the selected item and toggle function */}
-                                    <ToggleCheck selectedItem={selectedItem} onToggleCheck={handleToggleCheck} />
+                                    {/* Pass the selected item, item, and onToggleSuccess function */}
+                                    <ToggleCheck
+                                        selectedItem={selectedItem}
+                                        item={item}
+                                        onToggleSuccess={handleToggleSuccess}
+                                    />
                                 </Paper>
                             </Grid>
                         </Grid>
