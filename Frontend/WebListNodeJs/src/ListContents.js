@@ -80,7 +80,7 @@ export default function Lists() {
             palette: {
                 mode: !isDarkMode ? 'dark' : 'light',
                 primary: {
-                    main: '#04cc07',
+                    main: '#1976d2',
                 },
                 secondary: {
                     main: '#f50057',
@@ -94,7 +94,7 @@ export default function Lists() {
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
             primary: {
-                main: '#04cc07',
+                main: '#1976d2',
             },
             secondary: {
                 main: '#f50057',
@@ -128,7 +128,7 @@ export default function Lists() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Lists
+                            Dashboard
                         </Typography>
                         <IconButton
                             color="inherit"
@@ -140,7 +140,6 @@ export default function Lists() {
                     </Toolbar>
                 </AppBar>
 
-                {/* Drawer with other links */}
                 <Drawer variant="permanent" open={open}>
                     <Toolbar
                         sx={{
@@ -161,7 +160,6 @@ export default function Lists() {
                         {secondaryListItems}
                     </List>
                 </Drawer>
-
                 <Box component="main" sx={{ flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px' }}>
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
@@ -175,44 +173,7 @@ export default function Lists() {
                                         height: 670,
                                     }}
                                 >
-                                    <ListTable searchText={searchText} />
-                                </Paper>
-                            </Grid>
-                            {/* Side Components */}
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                        mb: 3,
-                                    }}
-                                >
-                                    <SearchList onSearch={handleSearch} />
-                                </Paper>
-
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                        mb: 3,
-                                    }}
-                                >
-                                    <ShowSelectedList />
-                                </Paper>
-
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                    }}
-                                >
-                                    <AddNewList />
+                                    {/* ADD CODE HERE */}
                                 </Paper>
                             </Grid>
                             {/* Other Components */}

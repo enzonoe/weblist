@@ -16,10 +16,9 @@ import { Divider, List } from "@mui/material";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Paper from "@mui/material/Paper";
-import ListTable from "./lists/ListTable";
-import AddNewList from "./lists/AddOrDeleteList";
-import ShowSelectedList from "./lists/ShowSelectedList";
-import SearchList from "./lists/SearchList";
+import AddRow from "./list_creation/AddRow";
+import ListForm from "./list_creation/ListForm";
+import CreateList from './list_creation/CreateList';
 
 const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -69,6 +68,41 @@ export default function Lists() {
     const [open, setOpen] = React.useState(true);
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [searchText, setSearchText] = React.useState('');
+    const [rows, setRows] = useState([{ id: 1, value: '' }]); // State for dynamic rows
+    const [listName, setListName] = useState(''); // State for list name
+    const [description, setDescription] = useState(''); // State for description
+
+    // Add a new row
+    const addRow = () => {
+        const newRow = { id: rows.length + 1, value: '' };
+        setRows([...rows, newRow]);
+    };
+
+    // Remove the last row
+    const removeRow = () => {
+        if (rows.length > 1) { // Ensure at least one row remains
+            const updatedRows = rows.slice(0, -1); // Remove the last row
+            setRows(updatedRows);
+        }
+    };
+
+    // Handle input change for dynamic rows
+    const handleRowChange = (id, value) => {
+        const updatedRows = rows.map(row =>
+            row.id === id ? { ...row, value } : row
+        );
+        setRows(updatedRows);
+    };
+
+    // Handle list name change
+    const handleListNameChange = (value) => {
+        setListName(value);
+    };
+
+    // Handle description change
+    const handleDescriptionChange = (value) => {
+        setDescription(value);
+    };
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -80,7 +114,7 @@ export default function Lists() {
             palette: {
                 mode: !isDarkMode ? 'dark' : 'light',
                 primary: {
-                    main: '#04cc07',
+                    main: '#1976d2',
                 },
                 secondary: {
                     main: '#f50057',
@@ -94,7 +128,7 @@ export default function Lists() {
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
             primary: {
-                main: '#04cc07',
+                main: '#1976d2',
             },
             secondary: {
                 main: '#f50057',
@@ -128,7 +162,7 @@ export default function Lists() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Lists
+                            Dashboard
                         </Typography>
                         <IconButton
                             color="inherit"
@@ -140,7 +174,6 @@ export default function Lists() {
                     </Toolbar>
                 </AppBar>
 
-                {/* Drawer with other links */}
                 <Drawer variant="permanent" open={open}>
                     <Toolbar
                         sx={{
@@ -161,24 +194,20 @@ export default function Lists() {
                         {secondaryListItems}
                     </List>
                 </Drawer>
-
                 <Box component="main" sx={{ flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px' }}>
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
                             {/* ListTable */}
                             <Grid item xs={12} md={8} lg={9}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 670,
-                                    }}
-                                >
-                                    <ListTable searchText={searchText} />
-                                </Paper>
+                                <ListForm
+                                    rows={rows}
+                                    onRowChange={handleRowChange}
+                                    listName={listName}
+                                    description={description}
+                                    onListNameChange={handleListNameChange}
+                                    onDescriptionChange={handleDescriptionChange}
+                                />
                             </Grid>
-                            {/* Side Components */}
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper
                                     sx={{
@@ -189,7 +218,7 @@ export default function Lists() {
                                         mb: 3,
                                     }}
                                 >
-                                    <SearchList onSearch={handleSearch} />
+                                    <AddRow onAddRow={addRow} onRemoveRow={removeRow} />
                                 </Paper>
 
                                 <Paper
@@ -201,18 +230,11 @@ export default function Lists() {
                                         mb: 3,
                                     }}
                                 >
-                                    <ShowSelectedList />
-                                </Paper>
-
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                    }}
-                                >
-                                    <AddNewList />
+                                    <CreateList
+                                        listName={listName}
+                                        description={description}
+                                        rows={rows}
+                                    />
                                 </Paper>
                             </Grid>
                             {/* Other Components */}
