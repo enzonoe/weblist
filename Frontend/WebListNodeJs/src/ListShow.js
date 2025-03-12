@@ -120,7 +120,7 @@ export default function ListShow() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}> {/* Prevent outer scrollbar */}
                 <CssBaseline />
                 <AppBar position="absolute" open={open}>
                     <Toolbar sx={{ pr: '24px' }}>
@@ -150,17 +150,17 @@ export default function ListShow() {
                     </List>
                 </Drawer>
 
-                <Box component="main" sx={{ flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px' }}>
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} md={8} lg={9}>
-                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 670 }}>
+                <Box component="main" sx={{ flexGrow: 1, overflow: 'hidden', marginTop: '64px' }}> {/* Prevent outer scrollbar */}
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, height: 'calc(100vh - 64px)', overflow: 'hidden' }}> {/* Adjust height and overflow */}
+                        <Grid container spacing={3} sx={{ height: '100%', overflow: 'hidden' }}> {/* Adjust height and overflow */}
+                            <Grid item xs={12} md={8} lg={9} sx={{ height: '100%', overflow: 'hidden' }}> {/* Adjust height and overflow */}
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '95%', overflow: 'auto' }}> {/* Make this scrollable */}
                                     {/* Pass "rows" and "onSelectItem" as props */}
                                     <ListItems rows={rows} onSelectItem={setSelectedItem} />
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
+                            <Grid item xs={12} md={4} lg={3} sx={{ height: 'auto', overflow: 'hidden' }}> {/* Keep this fixed height */}
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '240px', overflow: 'hidden' }}> {/* Fixed height */}
                                     {/* Pass the selected item, item, and refreshData function */}
                                     <ToggleCheck
                                         selectedItem={selectedItem}
