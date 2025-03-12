@@ -178,6 +178,60 @@ app.delete('/lists/:list_name', (req, res) => {
     });
 });
 
+// Toggle the checked status of a specific content item in a list
+// example: curl.exe -X PUT http://localhost:5000/lists/Groceries/1
+app.put('/lists/:list_name/:content_id', (req, res) => {
+    const listName = req.params.list_name;
+    const contentId = req.params.content_id;
+
+    // First, get the list_id for the provided list_name
+    const getListIdQuery = `SELECT list_id FROM lists WHERE list_name = ?`;
+
+    db.query(getListIdQuery, [listName], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error: Unable to find list', details: err });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'List not found' });
+        }
+
+        const listId = results[0].list_id;
+
+        // Toggle the checked status of the content item
+        const toggleCheckedQuery = `
+            UPDATE list_contents
+            SET checked = NOT checked
+            WHERE content_id = ? AND list_id = ?;
+        `;
+
+        db.query(toggleCheckedQuery, [contentId, listId], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database error: Unable to toggle checked status', details: err });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Content item not found in the specified list' });
+            }
+
+            // Update the last_changed timestamp of the list
+            const updateLastChangedQuery = `
+                UPDATE lists
+                SET last_changed = CURRENT_TIMESTAMP
+                WHERE list_id = ?;
+            `;
+
+            db.query(updateLastChangedQuery, [listId], (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Database error: Unable to update last_changed timestamp', details: err });
+                }
+
+                res.json({ message: `Checked status toggled for content item ${contentId} in list "${listName}"` });
+            });
+        });
+    });
+});
+
 //-----------------------------------------------------------------------------
 
 // Start server

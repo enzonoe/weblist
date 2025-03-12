@@ -3,26 +3,28 @@ import Typography from '@mui/material/Typography';
 import Title from "../other/Title";
 import { Button } from "@mui/material";
 import { Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-export default function AddOrDeleteList({ onDeleteList }) {
-    const navigate = useNavigate(); // Initialize the navigate function
-
-    const handleCreateList = () => {
-        navigate('/CreateList'); // Navigate to the /CreateList route
+export default function ToggleCheck({ selectedItem, onToggleCheck }) {
+    const handleCheckClick = () => {
+        if (selectedItem) {
+            // Call the onToggleCheck function passed from the parent
+            onToggleCheck(selectedItem);
+        }
     };
 
     return (
         <React.Fragment>
             <Title>Check/Uncheck List</Title>
             <Typography color="text.secondary" sx={{ flex: 1 }}>
-                Checks or unchecks the task in the list
+                {selectedItem ? `Selected: ${selectedItem.content}` : "No item selected"}
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
-                <Button variant="contained" onClick={handleCreateList}>
-                    Check
-                </Button>
-            </Box>
+            <Button
+                variant="contained"
+                onClick={handleCheckClick}
+                disabled={!selectedItem} // Disable if no item is selected
+            >
+                {selectedItem?.checked ? "Uncheck" : "Check"}
+            </Button>
         </React.Fragment>
     );
 }

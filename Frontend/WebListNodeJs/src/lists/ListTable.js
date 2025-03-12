@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Button } from '@mui/material';
 
@@ -11,51 +10,41 @@ const columns = [
     { field: 'lastChanged', headerName: 'Last Changed', width: 100 },
 ];
 
-export default function ListTable({ searchText, onDeleteList }) {
+export default function ListTable({ searchText, onSelectList }) {
     const [rows, setRows] = useState([]);
     const [filteredRows, setFilteredRows] = useState([]);
-    const [selectedRow, setSelectedRow] = useState(null); // Track selected row
 
     useEffect(() => {
-        // Fetch data from the API
         fetch('http://localhost:5000/')
             .then(response => response.json())
             .then(data => {
-                // Transform the fetched data into the rows format
                 const transformedData = Object.entries(data).map(([listName, listData], index) => ({
-                    id: index + 1, // Unique ID for each list
+                    id: index + 1,
                     listName: listName,
-                    description: listData.list_description, // Use the list_description field
+                    description: listData.list_description,
                     creationDate: new Date(listData.creation_date).toLocaleDateString(),
                     lastChanged: new Date(listData.last_changed).toLocaleDateString(),
                 }));
                 setRows(transformedData);
-                setFilteredRows(transformedData); // Initialize filtered rows
+                setFilteredRows(transformedData);
             })
             .catch(error => console.error('Error fetching data:', error));
     }, []);
 
     useEffect(() => {
-        // Filter rows based on search text
         if (searchText) {
             const filtered = rows.filter(row =>
                 row.listName.toLowerCase().includes(searchText.toLowerCase())
             );
             setFilteredRows(filtered);
         } else {
-            setFilteredRows(rows); // Reset to all rows if search text is empty
+            setFilteredRows(rows);
         }
     }, [searchText, rows]);
 
-    // Handle row selection
-    const handleRowSelection = (selection) => {
-        if (selection.length > 0) {
-            const selectedId = selection[0];
-            const selectedRow = filteredRows.find(row => row.id === selectedId);
-            setSelectedRow(selectedRow);
-        } else {
-            setSelectedRow(null);
-        }
+    const handleRowClick = (params) => {
+        console.log("Row clicked:", params.row); // Debugging
+        onSelectList(params.row.listName); // Pass the selected list name to the parent
     };
 
     return (
@@ -63,23 +52,8 @@ export default function ListTable({ searchText, onDeleteList }) {
             <DataGrid
                 rows={filteredRows}
                 columns={columns}
-                components={{
-                    pagination: () => null, // Hides the pagination controls
-                }}
-                checkboxSelection
-                onSelectionModelChange={handleRowSelection} // Track selected row
+                onRowClick={handleRowClick} // Use onRowClick instead of onSelectionModelChange
             />
-            {selectedRow && (
-                <Box sx={{ mt: 2 }}>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => onDeleteList(selectedRow.listName)} // Pass listName, not the entire row
-                    >
-                        Delete Selected List
-                    </Button>
-                </Box>
-            )}
         </div>
     );
 }

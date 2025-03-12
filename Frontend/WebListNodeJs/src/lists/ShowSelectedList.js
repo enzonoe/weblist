@@ -1,18 +1,31 @@
-import * as React from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Title from "../other/Title";
 import { Button } from "@mui/material";
 
+export default function ShowSelectedList({ selectedList }) {
+    const navigate = useNavigate();
 
-//TODO make button create new list
-export default function ShowSelectedList() {
+    console.log("Selected List in ShowSelectedList:", selectedList); // Debugging
+
+    const handleShowClick = () => {
+        if (selectedList) {
+            navigate(`/Lists/Show/${selectedList}`);
+        } else {
+            alert("No list selected!");
+        }
+    };
+
     return (
         <React.Fragment>
             <Title>Show List</Title>
             <Typography color="text.secondary" sx={{ flex: 1 }}>
-                Show selected List
+                {selectedList ? `Selected List: ${selectedList}` : "No list selected"}
             </Typography>
-            <Button variant="contained">Show</Button>
+            <Button variant="contained" onClick={handleShowClick} disabled={!selectedList}>
+                Show
+            </Button>
         </React.Fragment>
     );
 }

@@ -69,6 +69,7 @@ export default function Lists() {
     const [open, setOpen] = React.useState(true);
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [searchText, setSearchText] = React.useState('');
+    const [selectedList, setSelectedList] = useState('');
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -175,7 +176,7 @@ export default function Lists() {
                                         height: 670,
                                     }}
                                 >
-                                    <ListTable searchText={searchText} />
+                                    <ListTable searchText={searchText} onSelectList={setSelectedList} />
                                 </Paper>
                             </Grid>
                             {/* Side Components */}
@@ -201,9 +202,8 @@ export default function Lists() {
                                         mb: 3,
                                     }}
                                 >
-                                    <ShowSelectedList />
+                                    <ShowSelectedList selectedList={selectedList} />
                                 </Paper>
-
                                 <Paper
                                     sx={{
                                         p: 2,

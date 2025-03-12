@@ -67,9 +67,10 @@ export default function ListShow() {
     const { item } = useParams(); // Get "item" from URL
     const [open, setOpen] = useState(true);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null); // Track the selected item
 
     const toggleDrawer = () => setOpen(!open);
-    
+
     const toggleTheme = () => {
         setIsDarkMode((prev) => !prev);
         setTheme(createTheme({
@@ -88,6 +89,27 @@ export default function ListShow() {
             secondary: { main: '#f50057' },
         },
     }));
+
+    const handleToggleCheck = (selectedItem) => {
+        if (selectedItem) {
+            // Call the API to toggle the checked status
+            fetch(`http://localhost:5000/lists/${item}/${selectedItem.id}`, {
+                method: 'PUT',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Toggled checked status:', data);
+
+                    // Update the selected item's checked status locally
+                    const updatedItem = { ...selectedItem, checked: !selectedItem.checked };
+                    setSelectedItem(updatedItem);
+
+                    // Optionally, refetch the list data to update the UI
+                    // You can implement this if needed
+                })
+                .catch(error => console.error('Error toggling checked status:', error));
+        }
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -126,13 +148,14 @@ export default function ListShow() {
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={8} lg={9}>
                                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 670 }}>
-                                    {/* Pass "item" as a prop */}
-                                    <ListItems item={item} />
+                                    {/* Pass "item" and "onSelectItem" as props */}
+                                    <ListItems item={item} onSelectItem={setSelectedItem} />
                                 </Paper>
                             </Grid>
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
-                                    <ToggleCheck />
+                                    {/* Pass the selected item and toggle function */}
+                                    <ToggleCheck selectedItem={selectedItem} onToggleCheck={handleToggleCheck} />
                                 </Paper>
                             </Grid>
                         </Grid>
