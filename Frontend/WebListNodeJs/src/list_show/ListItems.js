@@ -1,85 +1,37 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'listName', headerName: 'List name', width: 220 },
-    { field: 'description', headerName: 'Description', width: 280 },
-    { field: 'creationDate', headerName: 'Creation Date', width: 100 },
-    { field: 'lastChanged', headerName: 'Last Changed', width: 100 },
+    { field: 'content', headerName: 'Content', width: 280 },
+    { field: 'checked', headerName: 'Checked', width: 120 },
 ];
 
-export default function ListItems({ searchText, onDeleteList }) {
+export default function ListItems({ item }) {
     const [rows, setRows] = useState([]);
-    const [filteredRows, setFilteredRows] = useState([]);
-    const [selectedRow, setSelectedRow] = useState(null); // Track selected row
 
     useEffect(() => {
-        // Fetch data from the API
-        fetch('http://localhost:5000/')
-            .then(response => response.json())
-            .then(data => {
-                // Transform the fetched data into the rows format
-                const transformedData = Object.entries(data).map(([listName, listData], index) => ({
-                    id: index + 1, // Unique ID for each list
-                    listName: listName,
-                    description: listData.list_description, // Use the list_description field
-                    creationDate: new Date(listData.creation_date).toLocaleDateString(),
-                    lastChanged: new Date(listData.last_changed).toLocaleDateString(),
-                }));
-                setRows(transformedData);
-                setFilteredRows(transformedData); // Initialize filtered rows
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
-
-    useEffect(() => {
-        // Filter rows based on search text
-        if (searchText) {
-            const filtered = rows.filter(row =>
-                row.listName.toLowerCase().includes(searchText.toLowerCase())
-            );
-            setFilteredRows(filtered);
-        } else {
-            setFilteredRows(rows); // Reset to all rows if search text is empty
+        if (item) {
+            fetch(`http://localhost:5000/${item}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.contents && Array.isArray(data.contents)) {
+                        const transformedData = data.contents.map((entry, index) => ({
+                            id: index + 1,
+                            content: entry.content,  // Correct key from API response
+                            checked: entry.checked ? "Yes" : "No", // Convert checked to Yes/No
+                        }));
+                        setRows(transformedData);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
         }
-    }, [searchText, rows]);
-
-    // Handle row selection
-    const handleRowSelection = (selection) => {
-        if (selection.length > 0) {
-            const selectedId = selection[0];
-            const selectedRow = filteredRows.find(row => row.id === selectedId);
-            setSelectedRow(selectedRow);
-        } else {
-            setSelectedRow(null);
-        }
-    };
+    }, [item]);
 
     return (
-        <div style={{ height: 640, width: '100%' }}>
-            <DataGrid
-                rows={filteredRows}
-                columns={columns}
-                components={{
-                    pagination: () => null, // Hides the pagination controls
-                }}
-                checkboxSelection
-                onSelectionModelChange={handleRowSelection} // Track selected row
-            />
-            {selectedRow && (
-                <Box sx={{ mt: 2 }}>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => onDeleteList(selectedRow.listName)} // Pass listName, not the entire row
-                    >
-                        Delete Selected List
-                    </Button>
-                </Box>
-            )}
-        </div>
+        <Box sx={{ height: 640, width: '100%' }}>
+            <DataGrid rows={rows} columns={columns} checkboxSelection />
+        </Box>
     );
 }

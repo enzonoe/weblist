@@ -64,7 +64,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const drawerWidth = 240;
 
-export default function Lists() {
+export default function ListCreation() {
     const [open, setOpen] = React.useState(true);
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [searchText, setSearchText] = React.useState('');

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -12,13 +13,13 @@ import Grid from '@mui/material/Grid';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Typography from "@mui/material/Typography";
 import { mainListItems, secondaryListItems } from './dashboard/ListItems';
-import { Divider, List } from "@mui/material";
+import { Divider, List, Paper } from "@mui/material";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import Paper from "@mui/material/Paper";
 import ListItems from "./list_show/ListItems";
 import ToggleCheck from "./list_show/ToggleCheck";
 
+const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -62,48 +63,31 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const drawerWidth = 240;
+export default function ListShow() {
+    const { item } = useParams(); // Get "item" from URL
+    const [open, setOpen] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
-export default function Lists() {
-    const [open, setOpen] = React.useState(true);
-    const [isDarkMode, setIsDarkMode] = React.useState(false);
-    const [searchText, setSearchText] = React.useState('');
-
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
-
+    const toggleDrawer = () => setOpen(!open);
+    
     const toggleTheme = () => {
-        setIsDarkMode(prevIsDarkMode => !prevIsDarkMode);
-        const newTheme = createTheme({
+        setIsDarkMode((prev) => !prev);
+        setTheme(createTheme({
             palette: {
                 mode: !isDarkMode ? 'dark' : 'light',
-                primary: {
-                    main: '#04cc07',
-                },
-                secondary: {
-                    main: '#f50057',
-                },
+                primary: { main: '#04cc07' },
+                secondary: { main: '#f50057' },
             },
-        });
-        setTheme(newTheme);
+        }));
     };
 
     const [theme, setTheme] = useState(() => createTheme({
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
-            primary: {
-                main: '#04cc07',
-            },
-            secondary: {
-                main: '#f50057',
-            },
+            primary: { main: '#04cc07' },
+            secondary: { main: '#f50057' },
         },
     }));
-
-    const handleSearch = (text) => {
-        setSearchText(text); // Update search text
-    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -111,44 +95,20 @@ export default function Lists() {
                 <CssBaseline />
                 <AppBar position="absolute" open={open}>
                     <Toolbar sx={{ pr: '24px' }}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleDrawer}
-                            sx={{ marginRight: '36px', ...(open && { display: 'none' }) }}
-                        >
+                        <IconButton edge="start" color="inherit" onClick={toggleDrawer} sx={{ marginRight: '36px', ...(open && { display: 'none' }) }}>
                             <MenuIcon />
                         </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            sx={{ flexGrow: 1 }}
-                        >
-                            Lists
+                        <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+                            Lists - {item} {/* Show the current list item */}
                         </Typography>
-                        <IconButton
-                            color="inherit"
-                            aria-label="toggle dark mode"
-                            onClick={toggleTheme}
-                        >
+                        <IconButton color="inherit" onClick={toggleTheme}>
                             {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
                         </IconButton>
                     </Toolbar>
                 </AppBar>
 
-                {/* Drawer with other links */}
                 <Drawer variant="permanent" open={open}>
-                    <Toolbar
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            px: [1],
-                        }}
-                    >
+                    <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: [1] }}>
                         <IconButton onClick={toggleDrawer}>
                             <ChevronLeftIcon />
                         </IconButton>
@@ -164,34 +124,17 @@ export default function Lists() {
                 <Box component="main" sx={{ flexGrow: 1, height: '100vh', overflow: 'auto', marginTop: '64px' }}>
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
-                            {/* ListTable */}
                             <Grid item xs={12} md={8} lg={9}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 670,
-                                    }}
-                                >
-                                    <ListItems searchText={searchText} />
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 670 }}>
+                                    {/* Pass "item" as a prop */}
+                                    <ListItems item={item} />
                                 </Paper>
                             </Grid>
-                            {/* Side Components */}
                             <Grid item xs={12} md={4} lg={3}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                        mb: 3,
-                                    }}
-                                >
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
                                     <ToggleCheck />
                                 </Paper>
                             </Grid>
-                            {/* Other Components */}
                         </Grid>
                     </Container>
                 </Box>

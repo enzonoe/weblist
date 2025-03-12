@@ -20,7 +20,7 @@ root.render(
                 {/* Ensure Lists is properly imported and used */}
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/Lists" element={<Lists />} />
-                <Route path="/Lists/Show" element={<ListShow />} />
+                <Route path="/Lists/Show/:item" element={<ListShow />} />
                 <Route path="/CreateList" element={<ListCreation />} />
                 <Route path="/Lists/Contents" element={<Contents />} />
             </Routes>
