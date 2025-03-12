@@ -4,20 +4,24 @@ import Title from "../other/Title";
 import { Button } from "@mui/material";
 import { Box } from '@mui/material';
 
-export default function ToggleCheck({ selectedItem, item, onToggleSuccess }) {
+export default function ToggleCheck({ selectedItem, item, refreshData }) {
+    React.useEffect(() => {
+        console.log('Selected Item in ToggleCheck:', selectedItem); // Log the selected item
+    }, [selectedItem]);
+
     const handleCheckClick = () => {
         if (selectedItem && item) {
-            // Call the API to toggle the checked status
-            fetch(`http://localhost:5000/lists/${item}/${selectedItem.id}`, {
+            const contentId = selectedItem.content_id;
+            console.log('Content ID:', contentId); // Log the content_id
+
+            fetch(`http://localhost:5000/lists/${item}/${contentId}`, {
                 method: 'PUT',
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Toggled checked status:', data);
-
-                    // Notify the parent component of the successful toggle
-                    if (onToggleSuccess) {
-                        onToggleSuccess({ ...selectedItem, checked: !selectedItem.checked });
+                    //console.log('Toggled checked status:', data);
+                    if (refreshData) {
+                        refreshData();
                     }
                 })
                 .catch(error => console.error('Error toggling checked status:', error));
@@ -33,7 +37,7 @@ export default function ToggleCheck({ selectedItem, item, onToggleSuccess }) {
             <Button
                 variant="contained"
                 onClick={handleCheckClick}
-                disabled={!selectedItem} // Disable if no item is selected
+                disabled={!selectedItem}
             >
                 {selectedItem?.checked ? "Uncheck" : "Check"}
             </Button>

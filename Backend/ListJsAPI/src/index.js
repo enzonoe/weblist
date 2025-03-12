@@ -30,7 +30,7 @@ db.connect(err => {
 // Get all lists and their contents, sorted by last_changed in descending order
 app.get('/', (req, res) => {
     const query = `
-        SELECT lists.list_id, lists.list_name, lists.list_description, lists.creation_date, lists.last_changed, list_contents.content, list_contents.checked
+        SELECT lists.list_id, lists.list_name, lists.list_description, lists.creation_date, lists.last_changed, list_contents.content_id, list_contents.content, list_contents.checked
         FROM lists
         LEFT JOIN list_contents ON lists.list_id = list_contents.list_id
         ORDER BY lists.last_changed DESC;
@@ -54,6 +54,7 @@ app.get('/', (req, res) => {
             }
             if (row.content) {
                 lists[row.list_name].contents.push({
+                    content_id: row.content_id,  // Added content_id here
                     content: row.content,
                     checked: row.checked,
                 });
@@ -62,7 +63,7 @@ app.get('/', (req, res) => {
 
         res.json(lists);
     });
-});
+})
 
 // Get specific list by name
 // example: curl.exe -X GET http://localhost:5000/Groceries
@@ -70,10 +71,18 @@ app.get('/:list_name', (req, res) => {
     const listName = req.params.list_name;
 
     const query = `
-        SELECT lists.list_id, lists.list_name, lists.list_description, lists.creation_date, lists.last_changed, list_contents.content, list_contents.checked
-        FROM lists
-        LEFT JOIN list_contents ON lists.list_id = list_contents.list_id
-        WHERE lists.list_name = ?;
+    SELECT 
+        lists.list_id, 
+        lists.list_name, 
+        lists.list_description, 
+        lists.creation_date, 
+        lists.last_changed, 
+        list_contents.content_id,  -- Include content_id in the query
+        list_contents.content, 
+        list_contents.checked
+    FROM lists
+    LEFT JOIN list_contents ON lists.list_id = list_contents.list_id
+    WHERE lists.list_name = ?;
     `;
 
     db.query(query, [listName], (err, results) => {
@@ -85,10 +94,14 @@ app.get('/:list_name', (req, res) => {
             return res.status(404).json({ error: 'List not found' });
         }
 
-        const listContents = results.map(row => ({
-            content: row.content,
-            checked: row.checked,
-        })).filter(item => item.content !== null);
+        // Map results to include content_id
+        const listContents = results
+            .map(row => ({
+                content_id: row.content_id, // Include content_id
+                content: row.content,
+                checked: row.checked,
+            }))
+            .filter(item => item.content !== null); // Filter out null content
 
         res.json({
             list_id: results[0].list_id,
@@ -96,7 +109,7 @@ app.get('/:list_name', (req, res) => {
             list_description: results[0].list_description,
             creation_date: results[0].creation_date,
             last_changed: results[0].last_changed,
-            contents: listContents,
+            contents: listContents, // Now includes content_id
         });
     });
 });
@@ -198,35 +211,48 @@ app.put('/lists/:list_name/:content_id', (req, res) => {
 
         const listId = results[0].list_id;
 
-        // Toggle the checked status of the content item
-        const toggleCheckedQuery = `
-            UPDATE list_contents
-            SET checked = NOT checked
-            WHERE content_id = ? AND list_id = ?;
-        `;
+        // Now, ensure the content_id belongs to this list
+        const checkContentQuery = `SELECT * FROM list_contents WHERE content_id = ? AND list_id = ?`;
 
-        db.query(toggleCheckedQuery, [contentId, listId], (err, result) => {
+        db.query(checkContentQuery, [contentId, listId], (err, contentResults) => {
             if (err) {
-                return res.status(500).json({ error: 'Database error: Unable to toggle checked status', details: err });
+                return res.status(500).json({ error: 'Database error: Unable to check content', details: err });
             }
 
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ error: 'Content item not found in the specified list' });
+            if (contentResults.length === 0) {
+                return res.status(404).json({ error: 'Content item not found in this list' });
             }
 
-            // Update the last_changed timestamp of the list
-            const updateLastChangedQuery = `
-                UPDATE lists
-                SET last_changed = CURRENT_TIMESTAMP
-                WHERE list_id = ?;
+            // Toggle the checked status
+            const toggleCheckedQuery = `
+                UPDATE list_contents
+                SET checked = NOT checked
+                WHERE content_id = ? AND list_id = ?;
             `;
 
-            db.query(updateLastChangedQuery, [listId], (err) => {
+            db.query(toggleCheckedQuery, [contentId, listId], (err, result) => {
                 if (err) {
-                    return res.status(500).json({ error: 'Database error: Unable to update last_changed timestamp', details: err });
+                    return res.status(500).json({ error: 'Database error: Unable to toggle checked status', details: err });
                 }
 
-                res.json({ message: `Checked status toggled for content item ${contentId} in list "${listName}"` });
+                if (result.affectedRows === 0) {
+                    return res.status(404).json({ error: 'Content item not found' });
+                }
+
+                // Update the last_changed timestamp of the list
+                const updateLastChangedQuery = `
+                    UPDATE lists
+                    SET last_changed = CURRENT_TIMESTAMP
+                    WHERE list_id = ?;
+                `;
+
+                db.query(updateLastChangedQuery, [listId], (err) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Database error: Unable to update last_changed timestamp', details: err });
+                    }
+
+                    res.json({ message: `Checked status toggled for content item ${contentId} in list "${listName}"` });
+                });
             });
         });
     });

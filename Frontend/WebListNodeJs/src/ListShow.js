@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -68,6 +68,7 @@ export default function ListShow() {
     const [open, setOpen] = useState(true);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null); // Track the selected item
+    const [rows, setRows] = useState([]); // State for DataGrid rows
 
     const toggleDrawer = () => setOpen(!open);
 
@@ -90,9 +91,32 @@ export default function ListShow() {
         },
     }));
 
-    const handleToggleSuccess = (updatedItem) => {
-        setSelectedItem(updatedItem);
+    // Function to fetch data and update the rows state
+    const refreshData = () => {
+        if (item) {
+            fetch(`http://localhost:5000/${item}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.contents && Array.isArray(data.contents)) {
+                        const transformedData = data.contents.map((entry, index) => ({
+                            id: index + 1, // DataGrid ID (not content_id)
+                            content_id: entry.content_id, // Ensure this is included
+                            content: entry.content,
+                            checked: entry.checked,
+                        }));
+                        console.log(transformedData)
+                        setRows(transformedData);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
     };
+
+    // Fetch data when the component mounts or when the item changes
+    useEffect(() => {
+        refreshData();
+    }, [item]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -131,17 +155,17 @@ export default function ListShow() {
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={8} lg={9}>
                                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 670 }}>
-                                    {/* Pass "item" and "onSelectItem" as props */}
-                                    <ListItems item={item} onSelectItem={setSelectedItem} />
+                                    {/* Pass "rows" and "onSelectItem" as props */}
+                                    <ListItems rows={rows} onSelectItem={setSelectedItem} />
                                 </Paper>
                             </Grid>
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
-                                    {/* Pass the selected item, item, and onToggleSuccess function */}
+                                    {/* Pass the selected item, item, and refreshData function */}
                                     <ToggleCheck
                                         selectedItem={selectedItem}
                                         item={item}
-                                        onToggleSuccess={handleToggleSuccess}
+                                        refreshData={refreshData}
                                     />
                                 </Paper>
                             </Grid>
