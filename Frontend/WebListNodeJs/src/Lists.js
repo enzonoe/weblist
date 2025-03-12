@@ -77,7 +77,7 @@ export default function Lists() {
             palette: {
                 mode: !isDarkMode ? 'dark' : 'light',
                 primary: {
-                    main: '#1976d2',
+                    main: '#04cc07',
                 },
                 secondary: {
                     main: '#f50057',
@@ -91,7 +91,7 @@ export default function Lists() {
         palette: {
             mode: isDarkMode ? 'dark' : 'light',
             primary: {
-                main: '#1976d2',
+                main: '#04cc07',
             },
             secondary: {
                 main: '#f50057',
