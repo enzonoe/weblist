@@ -27,11 +27,13 @@ db.connect(err => {
 
 // Get all lists and their contents
 // example: curl.exe -X GET http://localhost:5000/
+// Get all lists and their contents, sorted by last_changed in descending order
 app.get('/', (req, res) => {
     const query = `
         SELECT lists.list_id, lists.list_name, lists.list_description, lists.creation_date, lists.last_changed, list_contents.content, list_contents.checked
         FROM lists
-        LEFT JOIN list_contents ON lists.list_id = list_contents.list_id;
+        LEFT JOIN list_contents ON lists.list_id = list_contents.list_id
+        ORDER BY lists.last_changed DESC;
     `;
 
     db.query(query, (err, results) => {

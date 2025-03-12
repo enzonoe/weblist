@@ -1,78 +1,73 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Title from '../other/Title';
+import { useState, useEffect } from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import { Box, Button } from '@mui/material';
 
-// Generate Order Data
-function createData(id, date, name, checked, unchecked, amount) {
-    return {id, date, name, checked, unchecked, amount};
-}
-
-// TODO: Make the Data be recently altered lists
-const rows = [
-    createData(
-        0,
-        '16 Mar, 2019',
-        'Task List',
-        '25',
-        '5',
-        30,
-    ),
-    createData(
-        1,
-        '15 Mar, 2019',
-        'Groceries',
-        '9',
-        '1',
-        10,
-    ),
-    createData(
-        2,
-        '14 Mar, 2019',
-        'Watchlist',
-        '905',
-        '350',
-        1255
-    ),
+const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'listName', headerName: 'List name', width: 220 },
+    { field: 'description', headerName: 'Description', width: 280 },
+    { field: 'creationDate', headerName: 'Creation Date', width: 100 },
+    { field: 'lastChanged', headerName: 'Last Changed', width: 100 },
 ];
 
-function preventDefault(event) {
-    event.preventDefault();
-}
+export default function ShortList({ searchText, onDeleteList }) {
+    const [rows, setRows] = useState([]);
+    const [filteredRows, setFilteredRows] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null); // Track selected row
 
-export default function ShortList() {
+    useEffect(() => {
+        // Fetch data from the API
+        fetch('http://localhost:5000/')
+            .then(response => response.json())
+            .then(data => {
+                // Transform the fetched data into the rows format
+                const transformedData = Object.entries(data).map(([listName, listData], index) => ({
+                    id: index + 1, // Unique ID for each list
+                    listName: listName,
+                    description: listData.list_description, // Use the list_description field
+                    creationDate: new Date(listData.creation_date).toLocaleDateString(),
+                    lastChanged: new Date(listData.last_changed).toLocaleDateString(),
+                }));
+                setRows(transformedData);
+                setFilteredRows(transformedData); // Initialize filtered rows
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    useEffect(() => {
+        // Filter rows based on search text
+        if (searchText) {
+            const filtered = rows.filter(row =>
+                row.listName.toLowerCase().includes(searchText.toLowerCase())
+            );
+            setFilteredRows(filtered);
+        } else {
+            setFilteredRows(rows); // Reset to all rows if search text is empty
+        }
+    }, [searchText, rows]);
+
+    // Handle row selection
+    const handleRowSelection = (selection) => {
+        if (selection.length > 0) {
+            const selectedId = selection[0];
+            const selectedRow = filteredRows.find(row => row.id === selectedId);
+            setSelectedRow(selectedRow);
+        } else {
+            setSelectedRow(null);
+        }
+    };
+
     return (
-        <React.Fragment>
-            <Title>Recent Lists</Title>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Checked Tasks</TableCell>
-                        <TableCell>Unchecked Tasks</TableCell>
-                        <TableCell align="right">Total Amount</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell>{row.date}</TableCell>
-                            <TableCell>{row.name}</TableCell>
-                            <TableCell>{row.checked}</TableCell>
-                            <TableCell>{row.unchecked}</TableCell>
-                            <TableCell align="right">{row.amount}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <Link color="primary" href="#" onClick={preventDefault} sx={{mt: 3}}>
-                See all lists
-            </Link>
-        </React.Fragment>
+        <div style={{ height: 640, width: '100%' }}>
+            
+            <DataGrid
+                rows={filteredRows}
+                columns={columns}
+                components={{
+                    pagination: () => null, // Hides the pagination controls
+                }}
+            />
+        </div>
     );
 }
