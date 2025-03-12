@@ -5,6 +5,7 @@ import Dashboard from './Dashboard';
 import Lists from './Lists';
 import ListCreation from './ListCreation';
 import Contents from './ListContents';
+import ListShow from './ListShow';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // Get the root element
@@ -19,6 +20,7 @@ root.render(
                 {/* Ensure Lists is properly imported and used */}
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/Lists" element={<Lists />} />
+                <Route path="/Lists/Show" element={<ListShow />} />
                 <Route path="/CreateList" element={<ListCreation />} />
                 <Route path="/Lists/Contents" element={<Contents />} />
             </Routes>
